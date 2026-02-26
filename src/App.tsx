@@ -87,13 +87,20 @@ export default function App() {
     }
   }, [messages, isTyping]);
 
- const checkAuth = async () => {
-   setUser({
-     name: "Student",
-     email: "student@example.com"
-   });
-   setLoading(false);
- };
+  const checkAuth = async () => {
+    try {
+      const res = await fetch('/api/auth/me');
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+        fetchData();
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchData = async () => {
     try {
